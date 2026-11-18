@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌸 chibi day organizer 🌸</title>
+  <style>
+    /* AESTHETIC PINK + CUTE CHIBI VIBES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #ffe4ec 0%, #ffc0d0 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* cute floating sparkles / hearts */
+    body::before {
+      content: "🌸 ✨ 🌸 ✨ 🌸";
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+      opacity: 0.2;
+      white-space: nowrap;
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "🎀 ✨ 🎀 ✨ 🎀";
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 28px;
+      opacity: 0.2;
+      transform: rotate(5deg);
+      pointer-events: none;
+    }
+
+    .game-wrapper {
+      width: 100%;
+      max-width: 750px;
+      background-color: #fff5f9;
+      border-radius: 55px 55px 45px 45px;
+      padding: 24px 22px 30px;
+      box-shadow: 0 18px 30px rgba(255, 120, 160, 0.25),
+                  0 0 0 2px #fff9fb inset,
+                  0 0 0 5px #ffb6c9 inset;
+      border: 2px solid #ffe2ed;
+      position: relative;
+      backdrop-filter: blur(2px);
+      transition: transform 0.2s ease;
+    }
+
+    /* cute chibi characters row */
+    .chibi-friends {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      margin-bottom: 12px;
+      padding: 0 8px;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 6px 4px rgba(255, 140, 170, 0.2));
+    }
+
+    .chibi {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.2s;
+      animation: bounce 3s infinite alternate ease-in-out;
+    }
+
+    .chibi:nth-child(2) { animation-delay: 0.5s; }
+    .chibi:nth-child(3) { animation-delay: 1s; }
+
+    @keyframes bounce {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-6px); }
+    }
+
+    .chibi-face {
+      background: #ffe8f0;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      border: 3px solid white;
+      box-shadow: 0 5px 0 #fbaac3, 0 8px 12px rgba(255, 120, 150, 0.3);
+      position: relative;
+    }
+
+    /* tiny blush */
+    .chibi-face::after {
+      content: "••";
+      position: absolute;
+      bottom: 14px;
+      left: 8px;
+      font-size: 14px;
+      letter-spacing: 12px;
+      color: #ff8da1;
+      opacity: 0.7;
+      white-space: nowrap;
+      transform: scaleX(1.4);
+    }
+
+    .chibi-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #d45d7a;
+      background: #ffeef4;
+      padding: 2px 10px;
+      border-radius: 30px;
+      margin-top: 4px;
+      border: 1px solid #ffd0de;
+      letter-spacing: 0.5px;
+    }
+
+    /* main title */
+    .title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #c44b6b;
+      text-shadow: 3px 3px 0 #ffe2ed, 0 0 10px #fff0f5;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 1px;
+    }
+
+    .title span {
+      font-size: 2rem;
+      transform: rotate(5deg);
+      display: inline-block;
+    }
+
+    /* input area */
+    .add-task-area {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: #ffeef4;
+      padding: 10px 12px;
+      border-radius: 100px;
+      border: 2px solid #ffc1d4;
+      box-shadow: 0 5px 0 #fbb0c4;
+    }
+
+    .add-task-area input {
+      flex: 1;
+      background: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 50px;
+      font-size: 1rem;
+      outline: 2px solid #ffd9e4;
+      color: #7a3e52;
+      font-weight: 500;
+      transition: 0.15s;
+      letter-spacing: 0.3px;
+    }
+
+    .add-task-area input::placeholder {
+      color: #f5a7bd;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .add-task-area input:focus {
+      outline: 3px solid #ff9ebb;
+      background: #fffafc;
+    }
+
+    .add-task-area button {
+      background: #ff9ebb;
+      border: none;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #cc6f8a;
+      transition: all 0.07s;
+      line-height: 1;
+      border: 2px solid #fff3f8;
+    }
+
+    .add-task-area button:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #cc6f8a;
+    }
+
+    /* task list container */
+    .task-list-container {
+      background: #fff0f6;
+      border-radius: 40px;
+      padding: 18px 16px 12px;
+      border: 2px dashed #ffb0c8;
+      box-shadow: inset 0 0 0 5px #fff9fc, 0 8px 0 #f8b0c2;
+      margin-bottom: 12px;
+      min-height: 260px;
+      max-height: 380px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #ffa5be #ffe4ed;
+    }
+
+    .task-list-container::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .task-list-container::-webkit-scrollbar-track {
+      background: #ffe4ed;
+      border-radius: 20px;
+    }
+
+    .task-list-container::-webkit-scrollbar-thumb {
+      background: #ffa5be;
+      border-radius: 20px;
+      border: 2px solid #fff0f6;
+    }
+
+    .task-item {
+      background: #ffffff;
+      padding: 12px 12px 12px 20px;
+      margin-bottom: 10px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid #ffd3e2;
+      box-shadow: 0 4px 0 #fbb0c4;
+      transition: all 0.1s;
+      animation: popIn 0.2s ease-out;
+      word-break: break-word;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .task-check {
+      width: 26px;
+      height: 26px;
+      accent-color: #ff8bab;
+      border-radius: 50%;
+      cursor: pointer;
+      transform: scale(1.1);
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    .task-text {
+      flex: 1;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #5f2e40;
+      transition: 0.1s;
+      line-height: 1.4;
+      letter-spacing: 0.2px;
+    }
+
+    .task-text.completed {
+      text-decoration: line-through;
+      color: #c9a3b1;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* cute delete button */
+    .delete-btn {
+      background: #ffe1ea;
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #d14e74;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #e69eb2;
+      transition: all 0.07s;
+      flex-shrink: 0;
+      border: 1px solid #ffc1d2;
+    }
+
+    .delete-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 0px 0 #e69eb2;
+    }
+
+    /* footer / status */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding: 0 8px;
+      color: #b35d78;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .task-counter {
+      background: #ffe4ed;
+      padding: 8px 20px;
+      border-radius: 40px;
+      border: 1px solid #ffc1d4;
+      letter-spacing: 0.5px;
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 2px solid #ffb0c8;
+      color: #b35d78;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.1s;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(4px);
+    }
+
+    .clear-btn:hover {
+      background: #ffdae6;
+    }
+
+    .clear-btn:active {
+      background: #ffbdd1;
+      transform: scale(0.96);
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #d899ad;
+      font-style: italic;
+      padding: 40px 10px;
+      font-size: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      letter-spacing: 0.5px;
+    }
+
+    .empty-msg span {
+      font-size: 32px;
+    }
+
+    /* mobile */
+    @media (max-width: 520px) {
+      .game-wrapper { padding: 18px 14px; }
+      .title { font-size: 1.6rem; }
+      .chibi-face { width: 55px; height: 55px; font-size: 24px; }
+      .chibi-label { font-size: 8px; }
+      .add-task-area button { width: 48px; height: 48px; font-size: 24px; }
+      .task-text { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <!-- three cute chibi friends -->
+    <div class="chibi-friends">
+      <div class="chibi">
+        <div class="chibi-face">🐣</div>
+        <div class="chibi-label">mochi</div>
+      </div>
+      <div class="chibi">
+        <div class="chibi-face">🐼</div>
+        <div class="chibi-label">boba</div>
+      </div>
+      <div class="chibi">
+        <div class="chibi-face">🐰</div>
+        <div class="chibi-label">mimi</div>
+      </div>
+    </div>
+
+    <!-- title -->
+    <div class="title">
+      <span>🌸</span> my cute day <span>🌸</span>
+    </div>
+
+    <!-- input -->
+    <div class="add-task-area">
+      <input type="text" id="taskInput" placeholder="add something cute..." maxlength="60" autocomplete="off" />
+      <button id="addBtn" aria-label="add task">+</button>
+    </div>
+
+    <!-- task list -->
+    <div class="task-list-container" id="taskListContainer">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- footer counter / clear -->
+    <div class="footer">
+      <div class="task-counter" id="taskCounter">0 tasks</div>
+      <button class="clear-btn" id="clearBtn">clear all 🌸</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ----- DATA & STORAGE -----
+      let tasks = [];
+
+      // load from localStorage (so your day is saved)
+      const STORAGE_KEY = 'chibiDayOrganizerTasks';
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          tasks = JSON.parse(saved);
+          // ensure each task has completed property (migration just in case)
+          tasks = tasks.map(t => ({ ...t, completed: t.completed || false }));
+        }
+      } catch (e) {
+        console.warn("could not load tasks", e);
+        tasks = [];
+      }
+
+      // DOM elements
+      const taskInput = document.getElementById('taskInput');
+      const addBtn = document.getElementById('addBtn');
+      const taskListContainer = document.getElementById('taskListContainer');
+      const taskCounter = document.getElementById('taskCounter');
+      const clearBtn = document.getElementById('clearBtn');
+
+      // ----- RENDER FUNCTION -----
+      function render() {
+        // save to localStorage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+
+        // clear container
+        taskListContainer.innerHTML = '';
+
+        // if no tasks, show cute empty state
+        if (tasks.length === 0) {
+          const emptyDiv = document.createElement('div');
+          emptyDiv.className = 'empty-msg';
+          emptyDiv.innerHTML = `<span>🌸 ᵕ̈ 🌸</span> your day is empty...<br>add something cute!`;
+          taskListContainer.appendChild(emptyDiv);
+        } else {
+          // render each task
+          tasks.forEach((task, index) => {
+            const taskEl = document.createElement('div');
+            taskEl.className = 'task-item';
+
+            // checkbox
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'task-check';
+            checkbox.checked = task.completed;
+            checkbox.addEventListener('change', (e) => {
+              tasks[index].completed = e.target.checked;
+              render(); // re-render to update style & save
+            });
+
+            // task text
+            const textSpan = document.createElement('span');
+            textSpan.className = 'task-text' + (task.completed ? ' completed' : '');
+            textSpan.textContent = task.text;
+
+            // delete button
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-btn';
+            delBtn.innerHTML = '✕';
+            delBtn.setAttribute('aria-label', 'delete task');
+            delBtn.addEventListener('click', () => {
+              tasks.splice(index, 1);
+              render();
+            });
+
+            taskEl.appendChild(checkbox);
+            taskEl.appendChild(textSpan);
+            taskEl.appendChild(delBtn);
+
+            taskListContainer.appendChild(taskEl);
+          });
+        }
+
+        // update counter
+        const total = tasks.length;
+        const done = tasks.filter(t => t.completed).length;
+        if (total === 0) {
+          taskCounter.textContent = `0 tasks 🌱`;
+        } else {
+          taskCounter.textContent = `${done}/${total} done ✨`;
+        }
+      }
+
+      // ----- ADD TASK -----
+      function addTask() {
+        const text = taskInput.value.trim();
+        if (text === '') {
+          // cute little shake or highlight (just focus)
+          taskInput.focus();
+          taskInput.style.outline = '3px solid #ff7f9f';
+          setTimeout(() => taskInput.style.outline = '', 300);
+          return;
+        }
+        // limit length already set via maxlength
+        tasks.push({ text: text, completed: false });
+        taskInput.value = ''; // clear input
+        render();
+        // scroll to bottom of container smoothly
+        taskListContainer.scrollTop = taskListContainer.scrollHeight;
+        // focus back for easy adding
+        taskInput.focus();
+      }
+
+      // ----- CLEAR ALL TASKS -----
+      function clearAllTasks() {
+        if (tasks.length === 0) return;
+        // cute confirm (no annoying popup, just gentle)
+        const confirmClear = confirm('🌸 clear all your cute tasks? 🌸');
+        if (confirmClear) {
+          tasks = [];
+          render();
+        }
+      }
+
+      // ----- EVENT LISTENERS -----
+      addBtn.addEventListener('click', addTask);
+
+      taskInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addTask();
+        }
+      });
+
+      clearBtn.addEventListener('click', clearAllTasks);
+
+      // initial render
+      render();
+
+      // small extra: double-click on title for a surprise (just for fun)
+      document.querySelector('.title').addEventListener('dblclick', () => {
+        // sprinkle extra hearts (just console cheer)
+        console.log('🌸 you are doing amazing! 🌸');
+      });
+
+    })();
+  </script>
+</body>
+</html>
